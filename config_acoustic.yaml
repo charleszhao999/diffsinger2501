@@ -1,0 +1,104 @@
+base_config: configs/acoustic.yaml
+
+raw_data_dir:
+  - data/chiyu_dataset/raw
+speakers:
+  - chiyu
+spk_ids: []
+test_prefixes:
+  - 唱歌（实时）(174)_009
+  - 唱歌（实时）(170)_005
+  - 唱歌（实时）(189)_002
+  - 唱歌（实时）(191)_020
+  - 唱歌（实时）(127)_015
+  - 唱歌（实时）(16)_001
+  - 唱歌（实时）(3)_018
+  - 唱歌（实时）(168)_006
+  
+dictionary: dictionaries/japanese-dictionary.txt
+binary_data_dir: data/chiyu_acoustic/binary
+binarization_args:
+  num_workers: 0
+pe: parselmouth
+pe_ckpt: 'checkpoints/rmvpe/model.pt'
+hnsep: vr
+hnsep_ckpt: 'checkpoints/vr/model.pt'
+vocoder: NsfHifiGAN
+vocoder_ckpt: checkpoints/nsf_hifigan_44.1k_hop512_128bin_2024.02/model.ckpt
+
+use_spk_id: false
+num_spk: 1
+
+# NOTICE: before enabling variance embeddings, please read the docs at
+# https://github.com/openvpi/DiffSinger/tree/main/docs/BestPractices.md#choosing-variance-parameters
+use_energy_embed: false
+use_breathiness_embed: true
+use_voicing_embed: true
+use_tension_embed: true
+
+use_key_shift_embed: true
+use_speed_embed: true
+
+augmentation_args:
+  random_pitch_shifting:
+    enabled: true
+    range: [-5., 5.]
+    scale: 0.75
+  fixed_pitch_shifting:
+    enabled: false
+    targets: [-5., 5.]
+    scale: 0.5
+  random_time_stretching:
+    enabled: true
+    range: [0.5, 2.]
+    scale: 0.75
+
+# diffusion and shallow diffusion
+diffusion_type: reflow
+use_shallow_diffusion: true
+T_start: 0.4
+T_start_infer: 0.4
+K_step: 300
+K_step_infer: 300
+backbone_type: 'lynxnet'
+backbone_args:
+  num_channels: 1024
+  num_layers: 6
+  kernel_size: 31
+  dropout_rate: 0.0
+#backbone_type: 'wavenet'
+#backbone_args:
+#  num_channels: 512
+#  num_layers: 20
+#  dilation_cycle_length: 4
+shallow_diffusion_args:
+  train_aux_decoder: true
+  train_diffusion: true
+  val_gt_start: false
+  aux_decoder_arch: convnext
+  aux_decoder_args:
+    num_channels: 512
+    num_layers: 6
+    kernel_size: 7
+    dropout_rate: 0.1
+  aux_decoder_grad: 0.1
+lambda_aux_mel_loss: 0.2
+
+optimizer_args:
+  lr: 0.0003
+lr_scheduler_args:
+  scheduler_cls: torch.optim.lr_scheduler.StepLR
+  step_size: 10000
+  gamma: 0.75
+max_batch_frames: 24000
+max_batch_size: 24
+max_updates: 160000
+
+num_valid_plots: 8
+val_with_vocoder: true
+val_check_interval: 2000
+num_ckpt_keep: 5
+permanent_ckpt_start: 120000
+permanent_ckpt_interval: 20000
+pl_trainer_devices: 'auto'
+pl_trainer_precision: '16-mixed'

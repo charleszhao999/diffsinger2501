@@ -1,0 +1,253 @@
+vocab_text: 'SP: 0
+
+  A: 1
+
+  Edge: 2
+
+  GlottalStop: 3
+
+  I: 4
+
+  N: 5
+
+  O: 6
+
+  U: 7
+
+  a: 8
+
+  b: 9
+
+  by: 10
+
+  ch: 11
+
+  d: 12
+
+  dy: 13
+
+  e: 14
+
+  f: 15
+
+  fy: 16
+
+  g: 17
+
+  gw: 18
+
+  gy: 19
+
+  h: 20
+
+  hy: 21
+
+  i: 22
+
+  j: 23
+
+  k: 24
+
+  kw: 25
+
+  ky: 26
+
+  m: 27
+
+  my: 28
+
+  n: 29
+
+  ny: 30
+
+  o: 31
+
+  p: 32
+
+  py: 33
+
+  r: 34
+
+  ry: 35
+
+  s: 36
+
+  sh: 37
+
+  t: 38
+
+  ts: 39
+
+  ty: 40
+
+  u: 41
+
+  v: 42
+
+  w: 43
+
+  y: 44
+
+  z: 45
+
+  0: SP
+
+  1: A
+
+  2: Edge
+
+  3: GlottalStop
+
+  4: I
+
+  5: N
+
+  6: O
+
+  7: U
+
+  8: a
+
+  9: b
+
+  10: by
+
+  11: ch
+
+  12: d
+
+  13: dy
+
+  14: e
+
+  15: f
+
+  16: fy
+
+  17: g
+
+  18: gw
+
+  19: gy
+
+  20: h
+
+  21: hy
+
+  22: i
+
+  23: j
+
+  24: k
+
+  25: kw
+
+  26: ky
+
+  27: m
+
+  28: my
+
+  29: n
+
+  30: ny
+
+  31: o
+
+  32: p
+
+  33: py
+
+  34: r
+
+  35: ry
+
+  36: s
+
+  37: sh
+
+  38: t
+
+  39: ts
+
+  40: ty
+
+  41: u
+
+  42: v
+
+  43: w
+
+  44: y
+
+  45: z
+
+  AP: 0
+
+  <AP>: 0
+
+  <SP>: 0
+
+  ? ''''
+
+  : 0
+
+  pau: 0
+
+  cl: 0
+
+  br: 0
+
+  sil: 0
+
+  <vocab_size>: 46
+
+  '
+model_config:
+  hidden_dims: 128
+  down_sampling_factor: 3
+  down_sampling_times: 7
+  channels_scaleup_factor: 1.5
+melspec_config:
+  clamp: 1.0e-05
+  fmax: 32000
+  fmin: 40
+  hop_length: 512
+  n_fft: 2048
+  n_mels: 128
+  sample_rate: 44100
+  scale_factor: 4
+  win_length: 1024
+optimizer_config:
+  total_steps: 100000
+  weight_decay: 0.1
+  lr:
+    backbone: 0.0005
+    head: 0.0005
+  freeze:
+    backbone: false
+    head: false
+loss_config:
+  losses:
+    weights:
+    - 10.0
+    - 0.1
+    - 0.01
+    - 0.1
+    - 1.0
+    - 1.0
+    - 5.0
+    enable_RampUpScheduler:
+    - false
+    - false
+    - false
+    - true
+    - true
+    - true
+    - true
+  function:
+    num_bins: 10
+    alpha: 0.999
+    label_smoothing: 0.08
+    pseudo_label_ratio: 0.3
+data_augmentation_enabled: true
